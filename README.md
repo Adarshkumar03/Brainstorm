@@ -1,30 +1,53 @@
-# React + TypeScript + Vite
+# Collab Whiteboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based application that enables real-time collaboration through a shared digital whiteboard.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Whiteboard Creation and Joining: Users can create new whiteboard sessions or join existing ones.
+- Drawing Tools: Draw on the whiteboard using customizable colors and brush sizes.
+- Undo/Redo: Undo and redo drawing actions for flexibility and error correction.
+- Real-time Collaboration: See the cursors of other users in real-time as they interact with the whiteboard.
+- Image/PDF Export: Save the whiteboard content as an image (PNG or JPEG) or a PDF document.
+- Secure Authentication: User signup and login functionality managed by Keycloak for secure access control.
+- Responsive Design: The application adapts to different screen sizes and works seamlessly on desktop and mobile devices.
 
-## Expanding the ESLint configuration
+## Technologies
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Frontend:
 
-- Configure the top-level `parserOptions` property like this:
+- React (TypeScript)
+- Bootstrap 5.0
+- Fabric.js (for drawing functionality)
+- WebSocket (for real-time updates)
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+### Backend:
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- Node.js
+- Express.js
+- Socket.IO
+- Keycloak (Dockerized)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (version 14 or newer)
+- npm
+
+### Installation
+
+1.  Clone this repository: `git clone https://github.com/Adarshkumar03/collab-whiteboard.git`
+2.  Navigate to collabe-whiteboard: `cd collabe-whiteboard`
+3.  Install Dependencies: `npm install`
+
+### Development Mode
+
+1.  Start the Vite develpment server: `npm run dev`
+
+### Production Build
+
+1. Create an optimized build: `npm run build`
+2. The `dist` folder produced by the build process contains static files. Deploy these to your preferred web hosting platform.
+
+## Screenshots

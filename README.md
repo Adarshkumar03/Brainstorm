@@ -38,7 +38,7 @@ A web-based application that enables real-time collaboration through a shared di
 ### Installation
 
 1.  Clone this repository: `git clone https://github.com/Adarshkumar03/collab-whiteboard.git`
-2.  Navigate to collabe-whiteboard: `cd collabe-whiteboard`
+2.  Navigate to collabe-whiteboard: `cd collab-whiteboard`
 3.  Install Dependencies: `npm install`
 
 ### Development Mode

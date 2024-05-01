@@ -10,15 +10,14 @@ const WhiteboardTool = () => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [selectedColor, setSelectedColor] = useState("black");
   const [brushSize, setBrushSize] = useState(5);
-  const { innerWidth: viewportWidth, innerHeight: viewportHeight } = window;
-  console.log(viewportHeight, viewportWidth);
+
   useEffect(() => {
     const initializeCanvas = () => {
       console.log("Inside Initialize Canvas");
       const canvas = new fabric.Canvas("canvas", {
         preserveObjectStacking: true,
-        height: viewportHeight - 100,
-        width: viewportWidth,
+        height: window.innerHeight - 100,
+        width: window.innerWidth,
         backgroundColor: "grey",
       });
       canvas.isDrawingMode = false;

@@ -1,18 +1,12 @@
 import express, { json } from "express";
 import cors from "cors";
 import { v4 } from "uuid";
-// import session from "express-session";
-// import Keycloak from "keycloak-connect";
-import { Server } from "socket.io";
 import http from "http";
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
 
 const sessions = [];
 
-// const memoryStore = new session.MemoryStore();
-// const keycloak = new Keycloak({ store: memoryStore });
 app.use(json());
 app.use(cors());
 
@@ -66,18 +60,6 @@ app.post("/whiteboard/:sessionId/save", async (req, res) => {
   session.canvasName = canvasName;
   console.log(session);
   res.status(200).json({ message: "Canvas data saved successfully" });
-});
-
-io.on("connection", (socket) => {
-  console.log("A user connected");
-  const sessionId = socket.handshake.query.sessionId;
-  socket.join(sessionId);
-  socket.on("cursorPosition", (data) => {
-    socket.broadcast.emit("otherUserCursor", data);
-  });
-  socket.on("disconnect", () => {
-    console.log("A user disconnected");
-  });
 });
 
 server.listen(3000, () => {

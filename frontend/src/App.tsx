@@ -1,11 +1,12 @@
 import WhiteboardTool from "./routes/WhiteboardTool";
-import { Routes, Router, Route } from "react-router-dom";
-
+import Home from "./routes/Home";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <Routes>
-        <Route path="/whiteboard" element={<WhiteboardTool />} />
+        <Route path="/" element={<Home/>}/>
+        <Route path="/whiteboard/:sessionId" element={<WhiteboardTool />} />
     </Routes>
   );
 }

@@ -1,13 +1,12 @@
-import WhiteboardTool from "./routes/WhiteboardTool";
-import Home from "./routes/Home";
-import { Routes, Route } from "react-router-dom";
+
+import Protected from "./components/Protected";
+import Public from "./components/Public";
+import useAuth from "./hooks/useAuth";
 
 function App() {
+  const [isLogin, token] = useAuth();
   return (
-    <Routes>
-        <Route path="/" element={<Home/>}/>
-        <Route path="/whiteboard/:sessionId" element={<WhiteboardTool />} />
-    </Routes>
+    isLogin?<Protected token={token}/>:<Public/>
   );
 }
 

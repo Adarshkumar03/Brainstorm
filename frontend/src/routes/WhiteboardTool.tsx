@@ -2,8 +2,9 @@ import { fabric } from "fabric";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import WhiteboardNav from "../components/WhiteboardNav";
+import axios from "axios";
 
-const WhiteboardTool = () => {
+const WhiteboardTool = ({ token }) => {
   const { sessionId } = useParams();
   const [canv, setCanv] = useState<fabric.Canvas | null>(null);
   const [whiteboardName, setWhiteboardName] = useState("");
@@ -43,43 +44,48 @@ const WhiteboardTool = () => {
     };
 
     const fetchData = async () => {
-      const response = await fetch(
-        `http://localhost:3000/whiteboard/${sessionId}`
-      );
-      const data = await response.json();
-      if (Object.keys(data.canvasData).length == 0) {
-        initializeCanvas();
-        setWhiteboardName("Untitled Whiteboard");
-      } else {
-        setCanvas(data.canvasData);
-        setWhiteboardName(data.canvasName);
-      }
+      const config = {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      };
+      axios.get(`/whiteboard/${sessionId}`, config).then((res) => {
+        if (Object.keys(res.data.canvasData).length == 0) {
+          initializeCanvas();
+          setWhiteboardName("Untitled Whiteboard");
+        } else {
+          setCanvas(res.data.canvasData);
+          setWhiteboardName(res.data.canvasName);
+        }
+      });
     };
     fetchData();
   }, []);
 
   const handleSaveCanvas = async () => {
-    try {
-      const canvasJSON = canv?.toJSON();
-      const canvasDataString = JSON.stringify(canvasJSON);
-      const response = await fetch(
+    const canvasJSON = canv?.toJSON();
+    const canvasDataString = JSON.stringify(canvasJSON);
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    axios
+      .post(
         `http://localhost:3000/whiteboard/${sessionId}/save`,
+        JSON.stringify({
+          canvasData: canvasDataString,
+          canvasName: whiteboardName,
+        }),
         {
-          method: "POST",
-          body: JSON.stringify({
-            canvasData: canvasDataString,
-            canvasName: whiteboardName,
-          }),
-          headers: { "Content-Type": "application/json" },
+          headers: headers,
         }
-      );
-      if (!response.ok) {
-        throw new Error("Error saving canvas data");
-      }
-      console.log("Canvas data saved successfully!");
-    } catch (error) {
-      console.error("Error saving canvas:", error);
-    }
+      )
+      .then((res) => {
+        console.log("Canvas Saved Successfully");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleNameChange = (e) => {

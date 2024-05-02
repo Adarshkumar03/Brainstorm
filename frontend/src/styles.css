@@ -1,0 +1,49 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.nav {
+  background-color: #484644;
+  color: white;
+  padding: 10px 20px;
+}
+
+.whiteboard-container {
+  padding: 30px 100px;
+  display: grid;
+  grid-template-columns: repeat(5, 260px);
+}
+
+/* .whiteboard-item {
+  border: 1px soldi red;
+  width: 234px;
+  height: 132px;
+} */
+
+.add-btn {
+  width: 234px;
+  height: 182px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.whiteboard{
+  border: 1px solid black;
+  display: block;
+  text-decoration:none ;
+  color: black;
+}
+
+.whiteboard .top{
+  height: 70%;
+}
+
+.whiteboard p{
+  padding: 10px;
+  text-align: center;
+  font-weight: 700;
+}

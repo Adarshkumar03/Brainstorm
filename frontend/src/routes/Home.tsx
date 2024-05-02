@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { IconCirclePlus } from "@tabler/icons-react";
 
 const Home = ({ token }) => {
   const [whiteboards, setWhiteboards] = useState([]);
@@ -37,18 +38,17 @@ const Home = ({ token }) => {
   };
 
   return (
-    <div>
-      <h1>Welcome User!!</h1>
-      <button onClick={handleCreateNewSession}>New Whiteboard</button>
-      <div>
-        {whiteboards.map((wb) => (
-          <div>
-            <Link to={`/whiteboard/${wb?.sessionId}`}>
-              {wb?.canvasName || "Untitled Whiteboard"}
-            </Link>
-          </div>
-        ))}
-      </div>
+    <div className="whiteboard-container">
+      <button onClick={handleCreateNewSession} className="add-btn">
+        <IconCirclePlus size={70} color="#000" stroke={1.5} />
+        <p style={{ fontSize: "15px", marginTop: "5px" }}>New Whiteboard</p>
+      </button>
+      {whiteboards.map((wb) => (
+        <Link to={`/whiteboard/${wb?.sessionId}`} className="add-btn whiteboard">
+          <div className="top"></div>
+          <p style={{borderTop:"1px solid black"}}>{wb?.canvasName || "Untitled Whiteboard"}</p>
+        </Link>
+      ))}
     </div>
   );
 };

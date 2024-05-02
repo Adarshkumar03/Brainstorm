@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import WhiteboardNav from "../components/WhiteboardNav";
 import axios from "axios";
+import io from "socket.io-client";
+
+const socket = io("http://localhost:3000");
 
 const WhiteboardTool = ({ token }) => {
   const { sessionId } = useParams();
@@ -11,6 +14,10 @@ const WhiteboardTool = ({ token }) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [selectedColor, setSelectedColor] = useState("black");
   const [brushSize, setBrushSize] = useState(5);
+  const [windowSize, setWindowSize] = useState([
+    window.innerWidth,
+    window.innerHeight,
+  ]);
 
   useEffect(() => {
     const initializeCanvas = () => {
@@ -24,6 +31,9 @@ const WhiteboardTool = ({ token }) => {
       canvas.isDrawingMode = false;
       canvas.freeDrawingBrush.color = selectedColor;
       canvas.freeDrawingBrush.width = brushSize;
+      canvas.on("object:moving", (event) => {
+        handleCursorMove({ x: event.pointer.x, y: event.pointer.y });
+      });
       setCanv(canvas);
     };
 
@@ -40,6 +50,9 @@ const WhiteboardTool = ({ token }) => {
       canvas.isDrawingMode = false;
       canvas.freeDrawingBrush.color = selectedColor;
       canvas.freeDrawingBrush.width = brushSize;
+      canvas.on("object:moving", (event) => {
+        handleCursorMove({ x: event.pointer.x, y: event.pointer.y });
+      });
       setCanv(canvas);
     };
 
@@ -61,6 +74,47 @@ const WhiteboardTool = ({ token }) => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setWindowSize([window.innerWidth, window.innerHeight]);
+    };
+
+    window.addEventListener("resize", handleWindowResize);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (canv) {
+      canv.setWidth(windowSize[0]);
+      canv.setHeight(windowSize[1]);
+      canv.renderAll();
+    }
+  }, [windowSize, canv]);
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to the server");
+    });
+
+    socket.on("otherUserCursor", (data) => {
+      // Update display of other users' cursors based on data
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from the server");
+    });
+
+    // Cleanup function
+    return () => socket.disconnect();
+  }, []);
+
+  const handleCursorMove = (position) => {
+    socket.emit("cursorPosition", position);
+  };
 
   const handleSaveCanvas = async () => {
     const canvasJSON = canv?.toJSON();

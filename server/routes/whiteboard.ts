@@ -1,10 +1,20 @@
-import express from "express";
+import express, { Request } from "express";
 import { v4 as uuidv4 } from "uuid";
 
 interface SessionData {
   sessionId: string;
   canvasName: string;
   canvasData: any;
+  userEmail: string;
+}
+
+interface User {
+  email: string;
+  name: string;
+}
+
+interface UserAuthInfo extends Request {
+  user: User;
 }
 
 const router = express.Router();
@@ -18,12 +28,13 @@ router.get("/all", (req: express.Request, res: express.Response) => {
   res.json(simplifiedSessions);
 });
 
-router.get("/new", (req: express.Request, res: express.Response) => {
+router.get("/new", (req: UserAuthInfo, res: express.Response) => {
   const sessionId = uuidv4();
   sessions.push({
     sessionId: sessionId,
     canvasName: "Untitled Whiteboard",
     canvasData: {},
+    userEmail: req.user.email,
   });
   res.json({ sessionId });
 });
@@ -48,13 +59,18 @@ router.get("/:sessionId", (req: express.Request, res: express.Response) => {
 
 router.post(
   "/:sessionId/save",
-  async (req: express.Request, res: express.Response) => {
+  async (req: UserAuthInfo, res: express.Response) => {
     const sessionId = req.params.sessionId;
     const { canvasData, canvasName } = req.body;
 
     const session = sessions.find((session) => session.sessionId === sessionId);
     if (!session) {
       res.status(404).send("Session not found");
+      return;
+    }
+
+    if (session.userEmail !== req.user.email) {
+      res.status(403).send("Unauthorized: You cannot modify this session");
       return;
     }
 

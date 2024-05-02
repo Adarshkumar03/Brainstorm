@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-keycloak/web": "^3.4.0",
+    "@tabler/icons-react": "^3.3.0",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
     "fabric": "^5.3.0",

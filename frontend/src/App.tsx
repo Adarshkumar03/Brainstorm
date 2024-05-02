@@ -2,6 +2,7 @@
 import Protected from "./components/Protected";
 import Public from "./components/Public";
 import useAuth from "./hooks/useAuth";
+import "./styles.css";
 
 function App() {
   const [isLogin, token] = useAuth();

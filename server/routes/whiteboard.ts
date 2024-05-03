@@ -1,4 +1,4 @@
-import express, { Request } from "express";
+import express, { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 
 interface SessionData {
@@ -57,6 +57,20 @@ router.get("/:sessionId", (req: express.Request, res: express.Response) => {
   });
 });
 
+router.delete("/:sessionId", (req: Request, res: Response) => {
+  const sessionId = req.params.sessionId;
+  const sessionData = sessions.find(
+    (session) => session.sessionId === sessionId
+  );
+  let index = sessions.indexOf(sessionData);
+  if (index > -1) {
+    sessions.splice(index, 1);
+    res.status(200).json("Whiteboard delete Successfully"); 
+  } else {
+    res.status(500).send("Unable to delete");
+  }
+});
+
 router.post(
   "/:sessionId/save",
   async (req: UserAuthInfo, res: express.Response) => {
@@ -68,7 +82,6 @@ router.post(
       res.status(404).send("Session not found");
       return;
     }
-
     if (session.userEmail !== req.user.email) {
       res.status(403).send("Unauthorized: You cannot modify this session");
       return;

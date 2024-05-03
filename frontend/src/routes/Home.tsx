@@ -1,24 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { IconCirclePlus } from "@tabler/icons-react";
 
 const Home = ({ token }) => {
+  const isDone = useRef(false);
   const [whiteboards, setWhiteboards] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchWhiteboards = async () => {
-      const config = {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      };
-      axios
-        .get("/whiteboard/all", config)
-        .then((res) => setWhiteboards(res.data))
-        .catch((err) => console.error(err));
+  const fetchWhiteboards = async () => {
+    const config = {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
     };
+    axios
+      .get("/whiteboard/all", config)
+      .then((res) => setWhiteboards(res.data))
+      .catch((err) => console.error(err));
+  };
+
+  useEffect(() => {
+    if (isDone.current) return;
+    isDone.current = true;
     fetchWhiteboards();
   }, []);
 
@@ -37,6 +41,23 @@ const Home = ({ token }) => {
       .catch((err) => console.error(err));
   };
 
+  const handleDelete = (sessionId) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    axios
+      .delete(`/whiteboard/${sessionId}`, config)
+      .then((res) => {
+        console.log(`Whiteboard deleted with id:${sessionId}`);
+        fetchWhiteboards();
+        navigate("/");
+      })
+      .catch((err) => console.log("Failed to delete whiteboard"));
+  };
+
   return (
     <div className="whiteboard-container">
       <button onClick={handleCreateNewSession} className="add-btn">
@@ -44,9 +65,17 @@ const Home = ({ token }) => {
         <p style={{ fontSize: "15px", marginTop: "5px" }}>New Whiteboard</p>
       </button>
       {whiteboards.map((wb) => (
-        <Link to={`/whiteboard/${wb?.sessionId}`} className="add-btn whiteboard">
+        <Link
+          to={`/whiteboard/${wb?.sessionId}`}
+          className="add-btn whiteboard"
+        >
           <div className="top"></div>
-          <p style={{borderTop:"1px solid black"}}>{wb?.canvasName || "Untitled Whiteboard"}</p>
+          <div className="bottom">
+            <p style={{ borderTop: "1px solid black" }}>
+              {wb?.canvasName || "Untitled Whiteboard"}
+            </p>
+            <button onClick={() => handleDelete(wb?.sessionId)}>Delete</button>
+          </div>
         </Link>
       ))}
     </div>

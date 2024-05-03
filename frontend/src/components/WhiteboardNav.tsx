@@ -1,6 +1,13 @@
 import { fabric } from "fabric";
 import { useEffect, useState } from "react";
-import jsPDF from "jspdf";
+import {
+  IconSquare,
+  IconCircle,
+  IconWriting,
+  IconTriangleSquareCircle,
+  IconFileExport,
+  IconPhotoUp
+} from "@tabler/icons-react";
 
 interface WhiteboardNavProps {
   canv: fabric.Canvas | null;
@@ -30,6 +37,8 @@ const WhiteboardNav = ({
 
   const [isRedo, setIsRedo] = useState(false);
   const [history, setHistory] = useState<fabric.Object[]>([]);
+  const [shapesDisplay, setShapesDisplay] = useState(false);
+  const [redoDisp, setRedoDisp] = useState(false);
 
   const undo = () => {
     if (canv?._objects?.length > 0) {
@@ -71,17 +80,6 @@ const WhiteboardNav = ({
     canv?.add(circle);
   };
 
-  // const addNote = () => {
-  //   const note = new fabric.Rect({
-  //     left: 80,
-  //     top: 100,
-  //     width: 100,
-  //     height: 100,
-  //   });
-
-  //   canv?.add(note);
-  // };
-
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e?.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -99,25 +97,6 @@ const WhiteboardNav = ({
     }
   };
 
-  const handlePDFDownload = (e) => {
-    const imgData = canv?.toDataURL("png");
-    const pdf = new jsPDF();
-    pdf.addImage(imgData, "png", 0, 0);
-    pdf.save("whiteboard.pdf");
-  };
-
-  function handleImageDownload(e) {
-    const dataUrl = canv?.toDataURL("png"); // Can specify 'jpg', etc.
-
-    // Creating a download trigger mechanism
-    const link = document.createElement("a");
-    link.download = "whiteboard.png";
-    link.href = dataUrl;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
   const handleColorChange = (color: string) => {
     setSelectedColor(color);
     canv.freeDrawingBrush.color = color;
@@ -129,10 +108,34 @@ const WhiteboardNav = ({
   };
 
   return (
-    <div className="nav">
-      <button onClick={addRect}>Add Rectangle</button>
-      <button onClick={addCircle}>Add Circle</button>
-      <button>Add Shapes</button>
+    <div className="tool">
+      <div className="undo-redo">
+        {redoDisp && <button onClick={() => redo()}>Redo</button>}
+        <button
+          onClick={() => {
+            undo();
+            setRedoDisp(!redoDisp);
+          }}
+        >
+          Undo
+        </button>
+      </div>
+      <div className="shapes">
+        <button onClick={() => setShapesDisplay(!shapesDisplay)}>
+          <IconTriangleSquareCircle />
+        </button>
+        {shapesDisplay && (
+          <div>
+            <button onClick={addRect}>
+              <IconSquare />
+            </button>
+            <button onClick={addCircle}>
+              <IconCircle />
+            </button>
+          </div>
+        )}
+      </div>
+
       <button
         onClick={() => {
           if (canv) {
@@ -146,19 +149,22 @@ const WhiteboardNav = ({
       <div className="color-picker">
         <button
           className="color-option"
-          style={{ backgroundColor: "red" }}
           onClick={() => handleColorChange("red")}
-        ></button>
+        >
+          <IconWriting color="red" />
+        </button>
         <button
           className="color-option"
-          style={{ backgroundColor: "black" }}
           onClick={() => handleColorChange("black")}
-        ></button>
+        >
+          <IconWriting color="black" />
+        </button>
         <button
           className="color-option"
-          style={{ backgroundColor: "green" }}
           onClick={() => handleColorChange("green")}
-        ></button>
+        >
+          <IconWriting color="green" />
+        </button>
       </div>
       <div className="brush-size">
         <label htmlFor="brush-size-input">Brush Size:</label>
@@ -171,21 +177,14 @@ const WhiteboardNav = ({
           onChange={(e) => handleBrushSizeChange(parseInt(e.target.value, 10))}
         />
       </div>
-      <label>
+      <label className="file">
         <input
           type="file"
           accept="image/png,image/jpeg,image/gif"
           onChange={handleImageUpload}
         />
+        <IconPhotoUp/>
       </label>
-      {/* <button onClick={addNote}>Add Note</button> */}
-      <button onClick={() => console.log(JSON.stringify(canv))}>
-        JSON string(see console)
-      </button>
-      <button onClick={() => undo()}>Undo</button>
-      <button onClick={() => redo()}>Redo</button>
-      <button onClick={(e) => handleImageDownload(e)}>Save as PNG</button>
-      <button onClick={(e) => handlePDFDownload(e)}>Save as PDF</button>
     </div>
   );
 };

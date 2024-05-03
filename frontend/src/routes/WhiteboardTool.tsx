@@ -1,25 +1,34 @@
 import { fabric } from "fabric";
-import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
 import WhiteboardNav from "../components/WhiteboardNav";
 import axios from "axios";
-import io from "socket.io-client";
-
-const socket = io("http://localhost:3000");
+import jsPDF from "jspdf";
+import {
+  IconArrowDown,
+  IconFileTypePng,
+  IconFileTypePdf,
+  IconDeviceFloppy,
+} from "@tabler/icons-react";
 
 const WhiteboardTool = ({ token }) => {
   const { sessionId } = useParams();
   const [canv, setCanv] = useState<fabric.Canvas | null>(null);
   const [whiteboardName, setWhiteboardName] = useState("");
   const [isDrawing, setIsDrawing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [selectedColor, setSelectedColor] = useState("black");
   const [brushSize, setBrushSize] = useState(5);
   const [windowSize, setWindowSize] = useState([
     window.innerWidth,
     window.innerHeight,
   ]);
+  const isDone = useRef(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (isDone.current) return;
+    isDone.current = true;
     const initializeCanvas = () => {
       console.log("Inside Initialize Canvas");
       const canvas = new fabric.Canvas("canvas", {
@@ -31,9 +40,6 @@ const WhiteboardTool = ({ token }) => {
       canvas.isDrawingMode = false;
       canvas.freeDrawingBrush.color = selectedColor;
       canvas.freeDrawingBrush.width = brushSize;
-      canvas.on("object:moving", (event) => {
-        handleCursorMove({ x: event.pointer.x, y: event.pointer.y });
-      });
       setCanv(canvas);
     };
 
@@ -50,9 +56,6 @@ const WhiteboardTool = ({ token }) => {
       canvas.isDrawingMode = false;
       canvas.freeDrawingBrush.color = selectedColor;
       canvas.freeDrawingBrush.width = brushSize;
-      canvas.on("object:moving", (event) => {
-        handleCursorMove({ x: event.pointer.x, y: event.pointer.y });
-      });
       setCanv(canvas);
     };
 
@@ -73,9 +76,6 @@ const WhiteboardTool = ({ token }) => {
       });
     };
     fetchData();
-  }, []);
-
-  useEffect(() => {
     const handleWindowResize = () => {
       setWindowSize([window.innerWidth, window.innerHeight]);
     };
@@ -94,27 +94,6 @@ const WhiteboardTool = ({ token }) => {
       canv.renderAll();
     }
   }, [windowSize, canv]);
-
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Connected to the server");
-    });
-
-    socket.on("otherUserCursor", (data) => {
-      // Update display of other users' cursors based on data
-    });
-
-    socket.on("disconnect", () => {
-      console.log("Disconnected from the server");
-    });
-
-    // Cleanup function
-    return () => socket.disconnect();
-  }, []);
-
-  const handleCursorMove = (position) => {
-    socket.emit("cursorPosition", position);
-  };
 
   const handleSaveCanvas = async () => {
     const canvasJSON = canv?.toJSON();
@@ -145,15 +124,53 @@ const WhiteboardTool = ({ token }) => {
   const handleNameChange = (e) => {
     setWhiteboardName(e.target.value);
   };
+
+  const handlePDFDownload = (e) => {
+    const imgData = canv?.toDataURL("png");
+    const pdf = new jsPDF();
+    pdf.addImage(imgData, "png", 0, 0);
+    pdf.save("whiteboard.pdf");
+  };
+
+  function handleImageDownload(e) {
+    const dataUrl = canv?.toDataURL("png");
+    const link = document.createElement("a");
+    link.download = "whiteboard.png";
+    link.href = dataUrl;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   return (
     <div>
-      <input
-        type="text"
-        value={whiteboardName}
-        onChange={handleNameChange}
-        placeholder="Whiteboard Name"
-      />
-      <button onClick={handleSaveCanvas}>Save Whiteboard</button>
+      <div className="menu">
+        <div className="menu-item1">
+          <button onClick={() => navigate("/")}>Home</button>
+          <div>|</div>
+          <p onClick={() => setIsEditing(!isEditing)}>
+            <span>{whiteboardName}</span>
+            <IconArrowDown />
+          </p>
+          {isEditing && (
+            <input
+              type="text"
+              value={whiteboardName}
+              onChange={handleNameChange}
+              placeholder="Whiteboard Name"
+            />
+          )}
+        </div>
+        <div className="menu-item2">
+          <button onClick={handleSaveCanvas}><IconDeviceFloppy/></button>
+          <button onClick={(e) => handleImageDownload(e)}>
+            <IconFileTypePng />
+          </button>
+          <button onClick={(e) => handlePDFDownload(e)}>
+            <IconFileTypePdf />
+          </button>
+        </div>
+      </div>
       <WhiteboardNav
         canv={canv}
         setIsDrawing={setIsDrawing}

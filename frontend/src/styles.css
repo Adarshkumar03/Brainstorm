@@ -31,19 +31,49 @@
   cursor: pointer;
 }
 
-.whiteboard{
+.whiteboard {
   border: 1px solid black;
   display: block;
-  text-decoration:none ;
+  text-decoration: none;
   color: black;
 }
 
-.whiteboard .top{
+.whiteboard .top {
   height: 70%;
 }
 
-.whiteboard p{
+.whiteboard p {
   padding: 10px;
   text-align: center;
   font-weight: 700;
 }
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+}
+
+.menu-item1 {
+  display: flex;
+}
+
+.tool {
+  display: flex;
+  background-color: white;
+  color: black;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+}
+
+.file{
+  cursor: pointer;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+

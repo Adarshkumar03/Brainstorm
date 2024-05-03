@@ -7,7 +7,7 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
-.container{
+.container {
   background-color: #f0f0f0;
   height: 100vh;
   width: 100vw;
@@ -28,7 +28,6 @@ body {
   padding: 30px 100px;
   display: grid;
   grid-template-columns: repeat(5, 260px);
-  
 }
 
 .add-btn {
@@ -44,8 +43,8 @@ body {
   box-shadow: 2px 2px rgba(0, 0, 0, 0.3);
 }
 
-.new{
-  background-color: #0C34FA;
+.new {
+  background-color: #0c34fa;
   color: white;
 }
 
@@ -59,12 +58,26 @@ body {
 
 .whiteboard .top {
   height: 70%;
+  background-color: #F0F0F0;
 }
 
 .whiteboard p {
   padding: 10px;
   text-align: center;
   font-weight: 700;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid black;
+  padding: 10px;
+}
+
+.bottom button{
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
 }
 
 .menu {
@@ -192,19 +205,19 @@ body {
   position: absolute;
   display: flex;
   bottom: 55px;
-  left:40px;
+  left: 40px;
   background-color: white;
   border-radius: 5px;
 }
 
-.brush-size label:hover{
+.brush-size label:hover {
   background-color: #e8ede9;
 }
 
-.brush-input{
+.brush-input {
   position: absolute;
   bottom: 55px;
-  left:50px;
+  left: 50px;
   background-color: white;
   border-radius: 5px;
 }
@@ -213,7 +226,7 @@ body {
   cursor: pointer;
 }
 
-.file:hover{
+.file:hover {
   background-color: #e8ede9;
 }
 

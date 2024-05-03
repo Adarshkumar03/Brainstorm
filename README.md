@@ -20,6 +20,7 @@ A web-based application that enables real-time collaboration through a shared di
 - Bootstrap 5.0
 - Fabric.js (for drawing functionality)
 - WebSocket (for real-time updates)
+- keycloak.js
 
 ### Backend:
 
@@ -34,6 +35,7 @@ A web-based application that enables real-time collaboration through a shared di
 
 - Node.js (version 14 or newer)
 - npm
+- keycloak (dockerized)
 
 ### Installation
 
@@ -43,11 +45,37 @@ A web-based application that enables real-time collaboration through a shared di
 
 ### Development Mode
 
-1.  Start the Vite develpment server: `npm run dev`
+1. Enter the following code to start Keycloak
+   `docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:24.0.3 start-dev`
+2. Login in to the Admin Console
+3. Create a realme
+4. Create a client inside realme
+5. make an .env file that has following
+   `VITE_KEYCLOAK_URL=your_host_post`
+   `VITE_KEYCLOAK_REALM=your_realme_name`
+   `VITE_KEYCLOAK_CLIENT=your_client_name`
+6. Start the Vite develpment server: `npm run dev`
+7. Start the backend server: `npm start`
 
-### Production Build
+### Production Build (frontend)
 
 1. Create an optimized build: `npm run build`
 2. The `dist` folder produced by the build process contains static files. Deploy these to your preferred web hosting platform.
 
 ## Screenshots
+
+### Home Page
+
+![Home](images/home.png)
+
+### Login Page
+
+![Login](images/login.png)
+
+### Register Page
+
+![Register](images/register.png)
+
+### Whiteboard Tool
+
+![Whiteboard](images/whiteboardTool.png)

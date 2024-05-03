@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { IconHexagonPlusFilled } from "@tabler/icons-react";
+import { IconHexagonPlusFilled, IconTrash } from "@tabler/icons-react";
 
 const Home = ({ token }) => {
   const isDone = useRef(false);
@@ -71,10 +71,10 @@ const Home = ({ token }) => {
         >
           <div className="top"></div>
           <div className="bottom">
-            <p style={{ borderTop: "1px solid black" }}>
-              {wb?.canvasName || "Untitled Whiteboard"}
-            </p>
-            <button onClick={() => handleDelete(wb?.sessionId)}>Delete</button>
+            <p>{wb?.canvasName || "Untitled Whiteboard"}</p>
+            <button onClick={() => handleDelete(wb?.sessionId)}>
+              <IconTrash color="#ea0606"/>
+            </button>
           </div>
         </Link>
       ))}

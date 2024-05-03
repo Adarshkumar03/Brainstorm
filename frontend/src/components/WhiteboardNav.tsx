@@ -239,14 +239,14 @@ const WhiteboardNav = ({
           />
         )}
       </div>
-      <button className="file">
+      <label className="file">
         <input
           type="file"
           accept="image/png,image/jpeg,image/gif"
           onChange={handleImageUpload}
         />
-        <IconPhotoUp stroke={1} />
-      </button>
+        <IconPhotoUp stroke={1} color="red"/>
+      </label>
     </div>
   );
 };

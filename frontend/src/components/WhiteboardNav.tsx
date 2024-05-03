@@ -5,8 +5,11 @@ import {
   IconCircle,
   IconWriting,
   IconTriangleSquareCircle,
-  IconFileExport,
-  IconPhotoUp
+  IconArrowBackUp,
+  IconArrowForwardUp,
+  IconPhotoUp,
+  IconBrush,
+  IconBallpen,
 } from "@tabler/icons-react";
 
 interface WhiteboardNavProps {
@@ -39,6 +42,8 @@ const WhiteboardNav = ({
   const [history, setHistory] = useState<fabric.Object[]>([]);
   const [shapesDisplay, setShapesDisplay] = useState(false);
   const [redoDisp, setRedoDisp] = useState(false);
+  const [inkDisp, setInkDisp] = useState(false);
+  const [brushInputDisp, setBrishInputDisp] = useState(false);
 
   const undo = () => {
     if (canv?._objects?.length > 0) {
@@ -110,81 +115,138 @@ const WhiteboardNav = ({
   return (
     <div className="tool">
       <div className="undo-redo">
-        {redoDisp && <button onClick={() => redo()}>Redo</button>}
+        {redoDisp && (
+          <button onClick={() => redo()} className="redo">
+            <IconArrowForwardUp stroke={1} />
+          </button>
+        )}
         <button
           onClick={() => {
             undo();
             setRedoDisp(!redoDisp);
           }}
         >
-          Undo
+          <IconArrowBackUp stroke={1} />
         </button>
       </div>
-      <div className="shapes">
+      <div className="shapes-container">
         <button onClick={() => setShapesDisplay(!shapesDisplay)}>
-          <IconTriangleSquareCircle />
+          <IconTriangleSquareCircle stroke={1} />
         </button>
         {shapesDisplay && (
-          <div>
+          <div className="shapes">
             <button onClick={addRect}>
-              <IconSquare />
+              <IconSquare stroke={1} />
             </button>
             <button onClick={addCircle}>
-              <IconCircle />
+              <IconCircle stroke={1} />
             </button>
           </div>
         )}
       </div>
 
-      <button
-        onClick={() => {
-          if (canv) {
-            setIsDrawing(!isDrawing);
-            canv.isDrawingMode = isDrawing;
-          }
-        }}
-      >
-        Ink
-      </button>
-      <div className="color-picker">
+      <div className="ink-container">
         <button
-          className="color-option"
-          onClick={() => handleColorChange("red")}
+          onClick={() => {
+            setRedoDisp(false);
+            setBrishInputDisp(false);
+            setShapesDisplay(false);
+            if (canv) {
+              setIsDrawing(!isDrawing);
+              setInkDisp(!inkDisp);
+              canv.isDrawingMode = isDrawing;
+            }
+          }}
         >
-          <IconWriting color="red" />
+          <IconBallpen stroke={1} />
         </button>
-        <button
-          className="color-option"
-          onClick={() => handleColorChange("black")}
-        >
-          <IconWriting color="black" />
-        </button>
-        <button
-          className="color-option"
-          onClick={() => handleColorChange("green")}
-        >
-          <IconWriting color="green" />
-        </button>
+        {inkDisp && (
+          <div className="color-picker">
+            <button
+              className="color-option"
+              onClick={() => {
+                handleColorChange("red");
+                setRedoDisp(false);
+                setShapesDisplay(false);
+                setBrishInputDisp(false);
+                if (canv) {
+                  setIsDrawing(true);
+                  setInkDisp(false);
+                  canv.isDrawingMode = true;
+                }
+              }}
+            >
+              <IconWriting color="red" stroke={1} />
+            </button>
+            <button
+              className="color-option"
+              onClick={() => {
+                handleColorChange("black");
+                setRedoDisp(false);
+                setShapesDisplay(false);
+                setBrishInputDisp(false);
+                if (canv) {
+                  setIsDrawing(true);
+                  setInkDisp(false);
+                  canv.isDrawingMode = true;
+                }
+              }}
+            >
+              <IconWriting color="black" stroke={1} />
+            </button>
+            <button
+              className="color-option"
+              onClick={() => {
+                handleColorChange("green");
+                setRedoDisp(false);
+                setShapesDisplay(false);
+                setBrishInputDisp(false);
+                if (canv) {
+                  setIsDrawing(true);
+                  setInkDisp(false);
+                  canv.isDrawingMode = true;
+                }
+              }}
+            >
+              <IconWriting color="green" stroke={1} />
+            </button>
+          </div>
+        )}
       </div>
+
       <div className="brush-size">
-        <label htmlFor="brush-size-input">Brush Size:</label>
-        <input
-          type="range"
-          id="brush-size-input"
-          min="1"
-          max="20"
-          value={brushSize}
-          onChange={(e) => handleBrushSizeChange(parseInt(e.target.value, 10))}
-        />
+        <button
+          onClick={() => {
+            setBrishInputDisp(!brushInputDisp);
+            setShapesDisplay(false);
+            setInkDisp(false);
+            setRedoDisp(false);
+          }}
+        >
+          <IconBrush stroke={1} />
+        </button>
+        {brushInputDisp && (
+          <input
+            type="range"
+            id="brush-size-input"
+            min="1"
+            max="20"
+            value={brushSize}
+            onChange={(e) =>
+              handleBrushSizeChange(parseInt(e.target.value, 10))
+            }
+            className="brush-input"
+          />
+        )}
       </div>
-      <label className="file">
+      <button className="file">
         <input
           type="file"
           accept="image/png,image/jpeg,image/gif"
           onChange={handleImageUpload}
         />
-        <IconPhotoUp/>
-      </label>
+        <IconPhotoUp stroke={1} />
+      </button>
     </div>
   );
 };

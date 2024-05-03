@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { IconCirclePlus } from "@tabler/icons-react";
+import { IconHexagonPlusFilled } from "@tabler/icons-react";
 
 const Home = ({ token }) => {
   const isDone = useRef(false);
@@ -60,8 +60,8 @@ const Home = ({ token }) => {
 
   return (
     <div className="whiteboard-container">
-      <button onClick={handleCreateNewSession} className="add-btn">
-        <IconCirclePlus size={70} color="#000" stroke={1.5} />
+      <button onClick={handleCreateNewSession} className="add-btn new">
+        <IconHexagonPlusFilled size={70} color="#fff" stroke={1.5} />
         <p style={{ fontSize: "15px", marginTop: "5px" }}>New Whiteboard</p>
       </button>
       {whiteboards.map((wb) => (

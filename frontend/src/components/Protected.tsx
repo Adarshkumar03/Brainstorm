@@ -9,7 +9,7 @@ const Protected = ({ token }) => {
       <Routes>
         <Route
           element={
-            <div>
+            <div className="container">
               <Navbar />
               <Outlet />
             </div>

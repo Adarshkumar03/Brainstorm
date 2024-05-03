@@ -5,10 +5,11 @@ import WhiteboardNav from "../components/WhiteboardNav";
 import axios from "axios";
 import jsPDF from "jspdf";
 import {
-  IconArrowDown,
+  IconChevronDown,
   IconFileTypePng,
   IconFileTypePdf,
   IconDeviceFloppy,
+  IconHomeFilled,
 } from "@tabler/icons-react";
 
 const WhiteboardTool = ({ token }) => {
@@ -35,7 +36,7 @@ const WhiteboardTool = ({ token }) => {
         preserveObjectStacking: true,
         height: window.innerHeight - 100,
         width: window.innerWidth,
-        backgroundColor: "grey",
+        backgroundColor: "#f0f0f0",
       });
       canvas.isDrawingMode = false;
       canvas.freeDrawingBrush.color = selectedColor;
@@ -146,28 +147,37 @@ const WhiteboardTool = ({ token }) => {
     <div>
       <div className="menu">
         <div className="menu-item1">
-          <button onClick={() => navigate("/")}>Home</button>
-          <div>|</div>
-          <p onClick={() => setIsEditing(!isEditing)}>
-            <span>{whiteboardName}</span>
-            <IconArrowDown />
-          </p>
-          {isEditing && (
-            <input
-              type="text"
-              value={whiteboardName}
-              onChange={handleNameChange}
-              placeholder="Whiteboard Name"
-            />
-          )}
+          <button onClick={() => navigate("/")}>
+            <IconHomeFilled size={20} />
+          </button>
+          <div className="line"></div>
+          <div className="name">
+            <p onClick={() => setIsEditing(!isEditing)} className="w-name">
+              <span>{whiteboardName}</span>
+              <IconChevronDown className="down-arrow" stroke={1} />
+            </p>
+            {isEditing && (
+              <label className="name-change">
+                <p className="board-name">Board Name</p>
+                <input
+                  type="text"
+                  value={whiteboardName}
+                  onChange={handleNameChange}
+                  placeholder="Whiteboard Name"
+                />
+              </label>
+            )}
+          </div>
         </div>
         <div className="menu-item2">
-          <button onClick={handleSaveCanvas}><IconDeviceFloppy/></button>
+          <button onClick={handleSaveCanvas}>
+            <IconDeviceFloppy stroke={1.1} />
+          </button>
           <button onClick={(e) => handleImageDownload(e)}>
-            <IconFileTypePng />
+            <IconFileTypePng stroke={1.1} />
           </button>
           <button onClick={(e) => handlePDFDownload(e)}>
-            <IconFileTypePdf />
+            <IconFileTypePdf stroke={1.1} />
           </button>
         </div>
       </div>

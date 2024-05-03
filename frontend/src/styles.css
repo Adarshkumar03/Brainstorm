@@ -2,23 +2,34 @@
   margin: 0;
   padding: 0;
 }
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+.container{
+  background-color: #f0f0f0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
 .nav {
   background-color: #484644;
   color: white;
-  padding: 10px 20px;
+  padding: 15px 20px;
+}
+
+.nav-head {
+  font-weight: 500;
+  letter-spacing: 0.75px;
 }
 
 .whiteboard-container {
   padding: 30px 100px;
   display: grid;
   grid-template-columns: repeat(5, 260px);
+  
 }
-
-/* .whiteboard-item {
-  border: 1px soldi red;
-  width: 234px;
-  height: 132px;
-} */
 
 .add-btn {
   width: 234px;
@@ -29,10 +40,18 @@
   align-items: center;
   border-radius: 10px;
   cursor: pointer;
+  border: 1px solid white;
+  box-shadow: 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.new{
+  background-color: #0C34FA;
+  color: white;
 }
 
 .whiteboard {
-  border: 1px solid black;
+  border: 1px solid white;
+  background-color: white;
   display: block;
   text-decoration: none;
   color: black;
@@ -51,10 +70,83 @@
 .menu {
   display: flex;
   justify-content: space-between;
+  padding: 5px;
+  background-color: white;
+}
+
+.menu button {
+  padding: 4px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.menu button:hover {
+  background-color: #e8ede9;
+  color: black;
 }
 
 .menu-item1 {
   display: flex;
+}
+
+.name-change {
+  position: absolute;
+  top: 100px;
+  z-index: 20;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+.board-name {
+  font-weight: 300;
+}
+
+.name-change input {
+  padding: 5px;
+  margin-top: 8px;
+  width: 300px;
+}
+
+.menu-item1 button {
+  padding: 3px;
+  background-color: transparent;
+  border: none;
+  margin: auto 0;
+  cursor: pointer;
+}
+
+.line {
+  height: 50%;
+  border-right: 0.5px solid grey;
+  margin: auto 4px;
+}
+
+.menu-item1 p {
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.menu-item1 p:hover {
+  background-color: #e8ede9;
+}
+
+.down-arrow {
+  position: relative;
+  top: 8px;
+  left: 2px;
+}
+
+.menu-item2 {
+  margin-right: 20px;
+}
+
+.menu-item2 button {
+  background-color: transparent;
+  border: none;
+  margin: 0 5px;
 }
 
 .tool {
@@ -64,16 +156,67 @@
   position: fixed;
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(-40%);
   z-index: 20;
+  padding: 5px 2px;
+  border-radius: 5px;
 }
 
-.file{
+.tool button {
+  background-color: white;
+  border: none;
   cursor: pointer;
+  margin: 0 5px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.tool button:hover {
+  background-color: #e8ede9;
+}
+
+.redo {
+  position: absolute;
+  bottom: 55px;
+}
+
+.shapes {
+  position: absolute;
+  display: flex;
+  bottom: 50px;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.color-picker {
+  position: absolute;
+  display: flex;
+  bottom: 55px;
+  left:40px;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.brush-size label:hover{
+  background-color: #e8ede9;
+}
+
+.brush-input{
+  position: absolute;
+  bottom: 55px;
+  left:50px;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.file {
+  cursor: pointer;
+}
+
+.file:hover{
+  background-color: #e8ede9;
 }
 
 input[type="file"] {
   display: none;
 }
-
-

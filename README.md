@@ -1,4 +1,4 @@
-# Collab Whiteboard
+# Brainstorm
 
 A web-based application that enables real-time collaboration through a shared digital whiteboard.
 

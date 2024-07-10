@@ -19,14 +19,12 @@ A web-based application that enables real-time collaboration through a shared di
 - React (TypeScript)
 - Bootstrap 5.0
 - Fabric.js (for drawing functionality)
-- WebSocket (for real-time updates)
 - keycloak.js
 
 ### Backend:
 
 - Node.js
 - Express.js
-- Socket.IO
 - Keycloak (Dockerized)
 
 ## Getting Started

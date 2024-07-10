@@ -1,6 +1,6 @@
 import { fabric } from "fabric";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, ChangeEvent } from "react";
 import WhiteboardNav from "../components/WhiteboardNav";
 import axios from "axios";
 import jsPDF from "jspdf";
@@ -12,7 +12,11 @@ import {
   IconHomeFilled,
 } from "@tabler/icons-react";
 
-const WhiteboardTool = ({ token }) => {
+interface ProtectedProps {
+  token: string | boolean | null;
+}
+
+const WhiteboardTool: React.FC<ProtectedProps> = ({ token }) => {
   const { sessionId } = useParams();
   const [canv, setCanv] = useState<fabric.Canvas | null>(null);
   const [whiteboardName, setWhiteboardName] = useState("");
@@ -44,7 +48,7 @@ const WhiteboardTool = ({ token }) => {
       setCanv(canvas);
     };
 
-    const setCanvas = (canvasData) => {
+    const setCanvas = (canvasData: string) => {
       console.log("Inside Set Canvas");
       const canvas = new fabric.Canvas("canvas");
       const canvasJSON = JSON.parse(canvasData);
@@ -86,7 +90,7 @@ const WhiteboardTool = ({ token }) => {
     return () => {
       window.removeEventListener("resize", handleWindowResize);
     };
-  }, []);
+  }, [token, brushSize, selectedColor, sessionId]);
 
   useEffect(() => {
     if (canv) {
@@ -103,8 +107,9 @@ const WhiteboardTool = ({ token }) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     };
-    axios
-      .post(
+
+    try {
+      await axios.post(
         `http://localhost:3000/whiteboard/${sessionId}/save`,
         JSON.stringify({
           canvasData: canvasDataString,
@@ -113,31 +118,37 @@ const WhiteboardTool = ({ token }) => {
         {
           headers: headers,
         }
-      )
-      .then((res) => {
-        console.log("Canvas Saved Successfully");
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      );
+      console.log("Canvas Saved Successfully");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleNameChange = (e) => {
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setWhiteboardName(e.target.value);
   };
 
-  const handlePDFDownload = (e) => {
-    const imgData = canv?.toDataURL("png");
-    const pdf = new jsPDF();
-    pdf.addImage(imgData, "png", 0, 0);
-    pdf.save("whiteboard.pdf");
+  const handlePDFDownload = () => {
+    const imgData = canv?.toDataURL({ format: "png" });
+    if (imgData) {
+      const pdf = new jsPDF();
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("whiteboard.pdf");
+    } else {
+      console.error("No image data available to download as PDF");
+    }
   };
 
-  function handleImageDownload(e) {
-    const dataUrl = canv?.toDataURL("png");
+  function handleImageDownload() {
+    const dataUrl = canv?.toDataURL();
     const link = document.createElement("a");
     link.download = "whiteboard.png";
-    link.href = dataUrl;
+    link.href = dataUrl as string;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -173,10 +184,10 @@ const WhiteboardTool = ({ token }) => {
           <button onClick={handleSaveCanvas}>
             <IconDeviceFloppy stroke={1.1} />
           </button>
-          <button onClick={(e) => handleImageDownload(e)}>
+          <button onClick={() => handleImageDownload()}>
             <IconFileTypePng stroke={1.1} />
           </button>
-          <button onClick={(e) => handlePDFDownload(e)}>
+          <button onClick={() => handlePDFDownload()}>
             <IconFileTypePdf stroke={1.1} />
           </button>
         </div>

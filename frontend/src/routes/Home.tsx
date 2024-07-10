@@ -1,30 +1,41 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { IconHexagonPlusFilled, IconTrash } from "@tabler/icons-react";
 
-const Home = ({ token }) => {
+interface ProtectedProps {
+  token: string | boolean | null;
+}
+
+interface Whiteboard {
+  sessionId: string;
+  canvasName: string;
+}
+
+const Home:React.FC<ProtectedProps> = ({ token }) => {
   const isDone = useRef(false);
-  const [whiteboards, setWhiteboards] = useState([]);
+  const [whiteboards, setWhiteboards] = useState<Whiteboard[]>([]);
   const navigate = useNavigate();
 
-  const fetchWhiteboards = async () => {
+  const fetchWhiteboards = useCallback(async () => {
     const config = {
       headers: {
         authorization: `Bearer ${token}`,
       },
     };
-    axios
-      .get("/whiteboard/all", config)
-      .then((res) => setWhiteboards(res.data))
-      .catch((err) => console.error(err));
-  };
+    try {
+      const res = await axios.get("/whiteboard/all", config);
+      setWhiteboards(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [token]);
 
   useEffect(() => {
     if (isDone.current) return;
     isDone.current = true;
     fetchWhiteboards();
-  }, []);
+  }, [fetchWhiteboards]);
 
   const handleCreateNewSession = async () => {
     const config = {
@@ -41,21 +52,21 @@ const Home = ({ token }) => {
       .catch((err) => console.error(err));
   };
 
-  const handleDelete = (sessionId) => {
+  const handleDelete = async (sessionId: string) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     };
-    axios
-      .delete(`/whiteboard/${sessionId}`, config)
-      .then((res) => {
-        console.log(`Whiteboard deleted with id:${sessionId}`);
-        fetchWhiteboards();
-        navigate("/");
-      })
-      .catch((err) => console.log("Failed to delete whiteboard"));
+    try {
+      await axios.delete(`/whiteboard/${sessionId}`, config);
+      console.log(`Whiteboard deleted with id: ${sessionId}`);
+      fetchWhiteboards();
+      navigate("/");
+    } catch (err) {
+      console.log("Failed to delete whiteboard");
+    }
   };
 
   return (

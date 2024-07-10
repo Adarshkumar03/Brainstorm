@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    command: start-dev --import-realm --http-relative-path=/auth
+    volumes:
+      - ./realm-config:/opt/keycloak/data/import
+    ports:
+      - "8080:8080"
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin 

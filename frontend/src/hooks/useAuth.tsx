@@ -2,8 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import Keycloak from "keycloak-js";
 
 const useAuth = () => {
-  const [isLogin, setLogin] = useState(false);
-  const [token, setToken] = useState(null);
+  const [isLogin, setLogin] = useState<boolean>(false);
+  const [token, setToken] = useState<string | null>(null);
   const isRun = useRef(false);
 
   useEffect(() => {
@@ -22,7 +22,8 @@ const useAuth = () => {
       })
       .then((res) => {
         setLogin(res);
-        setToken(client.token);
+        if(client.token)
+          setToken(client.token);
       });
   }, []);
 

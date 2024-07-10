@@ -3,7 +3,11 @@ import Home from "../routes/Home";
 import { Routes, Route, Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 
-const Protected = ({ token }) => {
+interface ProtectedProps {
+  token: string | boolean | null;
+}
+
+const Protected:React.FC<ProtectedProps> = ({ token }) => {
   return (
     <>
       <Routes>

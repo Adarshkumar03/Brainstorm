@@ -1,5 +1,5 @@
 import { fabric } from "fabric";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
 import {
   IconSquare,
   IconCircle,
@@ -29,14 +29,6 @@ const WhiteboardNav = ({
   isDrawing,
   brushSize,
 }: WhiteboardNavProps) => {
-  useEffect(() => {
-    canv?.on("object:added", function () {
-      if (!isRedo) {
-        setHistory([]);
-      }
-      setIsRedo(false);
-    });
-  }, []);
 
   const [isRedo, setIsRedo] = useState(false);
   const [history, setHistory] = useState<fabric.Object[]>([]);
@@ -45,8 +37,17 @@ const WhiteboardNav = ({
   const [inkDisp, setInkDisp] = useState(false);
   const [brushInputDisp, setBrishInputDisp] = useState(false);
 
+  useEffect(() => {
+    canv?.on("object:added", function () {
+      if (!isRedo) {
+        setHistory([]);
+      }
+      setIsRedo(false);
+    });
+  }, [canv, isRedo]);
+
   const undo = () => {
-    if (canv?._objects?.length > 0) {
+    if (canv && canv?._objects?.length > 0) {
       setHistory([...history, canv?._objects.pop() as fabric.Object]); // Type assertion
       canv?.renderAll();
     }
@@ -86,7 +87,7 @@ const WhiteboardNav = ({
   };
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e?.target.files[0];
+    const file = e.target?.files?.[0];
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = (f) => {
@@ -104,12 +105,14 @@ const WhiteboardNav = ({
 
   const handleColorChange = (color: string) => {
     setSelectedColor(color);
-    canv.freeDrawingBrush.color = color;
+    if(canv)
+      canv.freeDrawingBrush.color = color;
   };
 
   const handleBrushSizeChange = (newSize: number) => {
     setBrushSize(newSize);
-    canv.freeDrawingBrush.width = newSize;
+    if(canv)
+      canv.freeDrawingBrush.width = newSize;
   };
 
   return (

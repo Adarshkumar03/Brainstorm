@@ -64,7 +64,11 @@ Brainstorm is a mern stack web-based application that enables real-time collabor
 
 ### Home Page
 
-![Home](images/home.png)
+![Home](images/homePage.png)
+
+### Whiteboard Tool
+
+![Whiteboard](images/whiteboard.png)
 
 ### Login Page
 
@@ -74,6 +78,4 @@ Brainstorm is a mern stack web-based application that enables real-time collabor
 
 ![Register](images/register.png)
 
-### Whiteboard Tool
 
-![Whiteboard](images/whiteboardTool.png)

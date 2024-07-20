@@ -1,6 +1,6 @@
 # Brainstorm
 
-A web-based application that enables real-time collaboration through a shared digital whiteboard.
+Brainstorm is a mern stack web-based application that enables real-time collaboration through a shared digital whiteboard.
 
 ## Features
 
@@ -57,7 +57,11 @@ A web-based application that enables real-time collaboration through a shared di
 
 ### Home Page
 
-![Home](images/home.png)
+![Home](images/homePage.png)
+
+### Whiteboard Tool
+
+![Whiteboard](images/whiteboard.png)
 
 ### Login Page
 
@@ -67,6 +71,4 @@ A web-based application that enables real-time collaboration through a shared di
 
 ![Register](images/register.png)
 
-### Whiteboard Tool
 
-![Whiteboard](images/whiteboardTool.png)

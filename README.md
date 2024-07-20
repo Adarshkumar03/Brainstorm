@@ -23,7 +23,7 @@ A web-based application that enables real-time collaboration through a shared di
 
 ### Backend:
 
-- Node.js
+- Node.js (TypeScript)
 - Express.js
 - Keycloak (Dockerized)
 
@@ -33,32 +33,25 @@ A web-based application that enables real-time collaboration through a shared di
 
 - Node.js (version 14 or newer)
 - npm
-- keycloak (dockerized)
+- docker
 
 ### Installation
 
-1.  Clone this repository: `git clone https://github.com/Adarshkumar03/collab-whiteboard.git`
-2.  Navigate to collabe-whiteboard: `cd collab-whiteboard`
-3.  Install Dependencies: `npm install`
+1. Run the following command to start Keycloak and MongoDB using Docker Compose:
 
-### Development Mode
+   ```sh
+   docker-compose up
+   ```
 
-1. Enter the following code to start Keycloak
-   `docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:24.0.3 start-dev`
-2. Login in to the Admin Console
-3. Create a realme
-4. Create a client inside realme
-5. make an .env file that has following
-   `VITE_KEYCLOAK_URL=your_host_post`
-   `VITE_KEYCLOAK_REALM=your_realme_name`
-   `VITE_KEYCLOAK_CLIENT=your_client_name`
-6. Start the Vite develpment server: `npm run dev`
-7. Start the backend server: `npm start`
+2. After the containers are up and running, execute the [script.sh](https://github.com/Adarshkumar03/collab-whiteboard/blob/main/script.sh) script to start the frontend and backend:
 
-### Production Build (frontend)
+   ```sh
+   ./script.sh
+   ```
 
-1. Create an optimized build: `npm run build`
-2. The `dist` folder produced by the build process contains static files. Deploy these to your preferred web hosting platform.
+   This script installs the necessary dependencies and starts the frontend and backend servers.
+
+3. Access the Flybooker application by opening your web browser and navigating to [http://localhost:5173](http://localhost:5173).
 
 ## Screenshots
 

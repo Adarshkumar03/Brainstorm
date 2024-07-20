@@ -1,13 +1,19 @@
-version: "3.8"
-
+version: "3"
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak:latest
-    command: start-dev --import-realm --http-relative-path=/auth
-    volumes:
-      - ./realm-config:/opt/keycloak/data/import
+    image: quay.io/keycloak/keycloak:21.0.2
+    container_name: keycloak
+    command: start-dev --import-realm
     ports:
-      - "8080:8080"
+      - 8080:8080
     environment:
-      - KEYCLOAK_USER=admin
-      - KEYCLOAK_PASSWORD=admin 
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KEYCLOAK_IMPORT=/tmp/realm-export.json
+    volumes:
+      - ./keycloak-data:/opt/keycloak/data/import
+    networks:
+      - my-network
+
+networks:
+  my-network:

@@ -5,16 +5,17 @@ import Navbar from "./Navbar";
 
 interface ProtectedProps {
   token: string | boolean | null;
+  logout: () => void
 }
 
-const Protected:React.FC<ProtectedProps> = ({ token }) => {
+const Protected:React.FC<ProtectedProps> = ({ token, logout }) => {
   return (
     <>
       <Routes>
         <Route
           element={
             <div className="container">
-              <Navbar />
+              <Navbar logout={logout}/>
               <Outlet />
             </div>
           }

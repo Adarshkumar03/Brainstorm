@@ -14,14 +14,26 @@ body {
   overflow: hidden;
 }
 .nav {
+  display: flex;
+  justify-content: space-between;
   background-color: #484644;
   color: white;
-  padding: 15px 20px;
+  padding: 10px 40px;
 }
 
 .nav-head {
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 22px;
+  padding:0;
+  margin:0;
   letter-spacing: 0.75px;
+}
+
+.nav button{
+  padding:6px;
+  font-weight: 700;
+  font-size:15px;
+  font-family: sans-serif;
 }
 
 .whiteboard-container {

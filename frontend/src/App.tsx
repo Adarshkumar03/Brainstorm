@@ -5,9 +5,9 @@ import useAuth from "./hooks/useAuth";
 import "./styles.css";
 
 function App() {
-  const [isLogin, token] = useAuth();
+  const [isLogin, token, logout] = useAuth();
   return (
-    isLogin?<Protected token={token}/>:<Public/>
+    isLogin?<Protected token={token} logout={logout}/>:<Public/>
   );
 }
 
